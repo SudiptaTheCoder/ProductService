@@ -1,6 +1,5 @@
 package com.future.productservice.FakeStoreServices;
 
-import com.future.productservice.Configurations.RestTemplateConfig;
 import com.future.productservice.Dtos.ProductDto;
 import com.future.productservice.Exceptions.CustomExceptions;
 import com.future.productservice.Models.CategoryModel;
@@ -13,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductServiceInterface {
 
     private RestTemplate restTemplate;
@@ -23,7 +22,7 @@ public class FakeStoreProductService implements ProductServiceInterface {
     }
 
     @Override
-    public List<ProductsModel> getProducts() {
+    public List<ProductsModel> getProducts() throws Exception{
 
         List<ProductsModel> products = new ArrayList<>();
         ProductDto[] productDtos = restTemplate.getForObject(
@@ -49,6 +48,26 @@ public class FakeStoreProductService implements ProductServiceInterface {
             throw new CustomExceptions("Product with id "+id+ " does not exist.");
         }
         return convertProductDtoToProduct(prductDto);
+    }
+
+    @Override
+    public ProductsModel createProduct(ProductsModel product){
+        return  null;
+    }
+
+    @Override
+    public ProductsModel updateProduct(long id, ProductsModel product){
+        return null;
+    }
+
+    @Override
+    public ProductsModel replaceProduct(long id, ProductsModel product){
+        return  null;
+    }
+
+    @Override
+    public void deleteProduct(long id){
+
     }
 
     private ProductsModel convertProductDtoToProduct(ProductDto productDto) {

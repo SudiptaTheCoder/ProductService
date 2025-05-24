@@ -4,25 +4,23 @@ package com.future.productservice.Controllers;
 import com.future.productservice.Exceptions.CustomExceptions;
 import com.future.productservice.Models.ProductsModel;
 import com.future.productservice.ProductInterfaces.ProductServiceInterface;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/items")
-public class ProductController {
+@RequestMapping("/apiItems")
+public class ApiProductController {
 
     private ProductServiceInterface productService;
 
-    public ProductController(ProductServiceInterface productService) {
+    public ApiProductController(@Qualifier("fakeStoreProductService") ProductServiceInterface productService) {
         this.productService = productService;
     }
 
     @GetMapping()
-    public List<ProductsModel> GetProducts() {
+    public List<ProductsModel> GetProducts() throws Exception {
         return productService.getProducts();
     }
 
@@ -32,7 +30,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ProductsModel CreateProduct(@RequestBody ProductsModel productsModel) {
+    public ProductsModel CreateProduct(@RequestBody ProductsModel productsModel){
         return new ProductsModel();
     }
 

@@ -16,4 +16,13 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST
         );
     }
+
+    @ExceptionHandler(Exception.class)
+    private ResponseEntity<String> ProductException(Exception e){
+        ResponseEntity<String> response = new ResponseEntity<>(
+                e.getMessage(),
+                HttpStatus.BAD_GATEWAY
+        );
+        return response;
+    }
 }

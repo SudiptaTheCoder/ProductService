@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 public interface ProductServiceInterface {
-    List<ProductsModel> getProducts();
+    List<ProductsModel> getProducts() throws Exception;
     ProductsModel getProductById(long id) throws CustomExceptions;
+    ProductsModel createProduct(ProductsModel product);
+    ProductsModel updateProduct(long id,ProductsModel product);
+    ProductsModel replaceProduct(long id,ProductsModel product);
+    void deleteProduct(long id);
 }
