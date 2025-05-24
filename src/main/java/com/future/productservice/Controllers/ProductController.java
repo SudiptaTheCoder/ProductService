@@ -1,8 +1,11 @@
 package com.future.productservice.Controllers;
 
 
+import com.future.productservice.Exceptions.CustomExceptions;
 import com.future.productservice.Models.ProductsModel;
 import com.future.productservice.ProductInterfaces.ProductServiceInterface;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -24,7 +27,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ProductsModel GetProduct(@PathVariable("id") long id) {
+    public ProductsModel GetProduct(@PathVariable("id") long id) throws CustomExceptions {
         return productService.getProductById(id);
     }
 
@@ -47,4 +50,12 @@ public class ProductController {
     public void deleteProduct(@PathVariable("id") long id) {
 
     }
+
+//    @ExceptionHandler(CustomExceptions.class)
+//    private ResponseEntity<String> productNotFoundExceptionFromController(CustomExceptions customExceptions) {
+//        return new ResponseEntity<>(
+//                customExceptions.getMessage(),
+//                HttpStatus.BAD_GATEWAY
+//        );
+//    }
 }

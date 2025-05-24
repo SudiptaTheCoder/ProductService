@@ -2,6 +2,7 @@ package com.future.productservice.FakeStoreServices;
 
 import com.future.productservice.Configurations.RestTemplateConfig;
 import com.future.productservice.Dtos.ProductDto;
+import com.future.productservice.Exceptions.CustomExceptions;
 import com.future.productservice.Models.CategoryModel;
 import com.future.productservice.Models.ProductsModel;
 import com.future.productservice.Models.RatingModel;
@@ -38,12 +39,15 @@ public class FakeStoreProductService implements ProductServiceInterface {
     }
 
     @Override
-    public ProductsModel getProductById(long id) {
+    public ProductsModel getProductById(long id) throws CustomExceptions {
 
         ProductDto prductDto = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/"+id,
                 ProductDto.class
         );
+        if(prductDto == null) {
+            throw new CustomExceptions("Product with id "+id+ " does not exist.");
+        }
         return convertProductDtoToProduct(prductDto);
     }
 
