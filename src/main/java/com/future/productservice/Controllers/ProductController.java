@@ -1,22 +1,50 @@
 package com.future.productservice.Controllers;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.future.productservice.Models.ProductsModel;
+import com.future.productservice.ProductInterfaces.ProductServiceInterface;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
-@RequestMapping("/Items")
+@RequestMapping("/items")
 public class ProductController {
 
-    @GetMapping("/welcome/{name}")
-    public String sayHello(@PathVariable("name") String name) {
-        return ("Hello "+name);
+    private ProductServiceInterface productService;
+
+    public ProductController(ProductServiceInterface productService) {
+        this.productService = productService;
     }
 
-    @GetMapping("/exit")
-    public  String sayGoodbye(){
-        return ("Goodbye World");
+    @GetMapping()
+    public List<ProductsModel> GetProducts() {
+        return productService.getProducts();
+    }
+
+    @GetMapping("/{id}")
+    public ProductsModel GetProduct(@PathVariable("id") long id) {
+        return productService.getProductById(id);
+    }
+
+    @PostMapping()
+    public ProductsModel CreateProduct(@RequestBody ProductsModel productsModel) {
+        return new ProductsModel();
+    }
+
+    @PatchMapping("/{id}")
+    public ProductsModel UpdateProduct(@PathVariable("id") long id, @RequestBody ProductsModel productsModel) {
+        return new ProductsModel();
+    }
+
+    @PutMapping("/{id}")
+    public ProductsModel ReplaceProduct(@PathVariable("id") long id, @RequestBody ProductsModel productsModel) {
+        return new ProductsModel();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable("id") long id) {
+
     }
 }
