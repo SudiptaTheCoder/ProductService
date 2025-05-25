@@ -15,6 +15,6 @@ public class ProductsModel  extends BaseModel {
     private  String image;
     @ManyToOne
     private  CategoryModel category;
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToOne(cascade = CascadeType.ALL)
     private RatingModel rating;
 }

@@ -32,8 +32,12 @@ public class DbProductService implements ProductServiceInterface {
     }
 
     @Override
-    public List<ProductsModel> getProducts() {
-        return null;
+    public List<ProductsModel> getProducts() throws Exception {
+        List<ProductsModel> products = productRepository.findAll();
+        if(products.isEmpty()){
+            throw new Exception("No products available right now.");
+        }
+        return products;
     }
 
     @Override
@@ -50,31 +54,74 @@ public class DbProductService implements ProductServiceInterface {
     }
 
     @Override
-    public ProductsModel createProduct(ProductsModel product) {
-        CategoryModel categoryModel = product.getCategory();
-        Optional<CategoryModel> category = categoryRepository.findByTitle(categoryModel.getTitle());
-
-        if(category.isEmpty()){
-            categoryModel = categoryRepository.save(categoryModel);
+    public ProductsModel createProduct(ProductsModel product) throws Exception {
+        if(product == null || product.getTitle() == null || product.getPrice() == 0){
+            throw new RuntimeException("Product Details unAvailable");
         }
-
-        product.setCategory(categoryModel);
+        CategoryModel category = product.getCategory();
+        if(category != null){
+            category = getCategoryByTitle(category);
+        }
+        product.setCategory(category);
 
         return productRepository.save(product);
     }
 
     @Override
-    public ProductsModel updateProduct(long id, ProductsModel product) {
-        return null;
+    public ProductsModel updateProduct(long id, ProductsModel product) throws Exception {
+        throw  new UnsupportedOperationException("Not supported yet, insteed you can replace the product.");
     }
 
     @Override
-    public ProductsModel replaceProduct(long id, ProductsModel product) {
-        return null;
+    public ProductsModel replaceProduct(long id, ProductsModel product) throws Exception {
+        Optional<ProductsModel> products = productRepository.findById(id);
+        if(products.isEmpty()){
+            throw new Exception("Product not found with id " + id);
+        }
+        if(product.getTitle() == null || product.getPrice() == 0){
+            throw new RuntimeException("Product Details unAvailable");
+        }
+
+        CategoryModel category = product.getCategory();
+        if(category != null){
+            category = getCategoryByTitle(category);
+        }
+        product.setCategory(category);
+
+
+        ProductsModel productFromDb =  products.get();
+        productFromDb.setCategory(product.getCategory());
+        productFromDb.setTitle(product.getTitle());
+        productFromDb.setPrice(product.getPrice());
+        productFromDb.setDescription(product.getDescription());
+
+        productFromDb.setRating(product.getRating());
+        productFromDb.setImage(product.getImage());
+
+        return productRepository.save(productFromDb);
     }
 
     @Override
-    public void deleteProduct(long id) {
+    public void deleteProduct(long id) throws Exception {
+        Optional<ProductsModel> products = productRepository.findById(id);
+        if(products.isEmpty()){
+            throw new Exception("Product not found with id " + id);
+        }
+        productRepository.deleteById(id);
+    }
 
+    private CategoryModel getCategoryByTitle(CategoryModel title) throws CustomExceptions {
+        CategoryModel category = null;
+        if(title == null){
+            throw new CustomExceptions("Category Details unAvailable");
+        }
+        Optional<CategoryModel> optionalCategory = categoryRepository.findByTitle(title.getTitle());
+        if(optionalCategory.isEmpty()){
+            category = categoryRepository.save(title);
+        }
+        else {
+            category = optionalCategory.get();
+        }
+        return category;
     }
 }

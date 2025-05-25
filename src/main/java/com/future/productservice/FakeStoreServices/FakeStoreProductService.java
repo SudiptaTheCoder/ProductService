@@ -33,6 +33,9 @@ public class FakeStoreProductService implements ProductServiceInterface {
         for(ProductDto productDto : productDtos) {
             products.add(convertProductDtoToProduct(productDto));
         }
+        if(products.isEmpty()) {
+            throw new Exception("No products are available");
+        }
 
         return products;
     }
@@ -52,22 +55,22 @@ public class FakeStoreProductService implements ProductServiceInterface {
 
     @Override
     public ProductsModel createProduct(ProductsModel product){
-        return  null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public ProductsModel updateProduct(long id, ProductsModel product){
-        return null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public ProductsModel replaceProduct(long id, ProductsModel product){
-        return  null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void deleteProduct(long id){
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     private ProductsModel convertProductDtoToProduct(ProductDto productDto) {

@@ -28,22 +28,22 @@ public class DbProductController {
     }
 
     @PostMapping()
-    public ProductsModel CreateProduct(@RequestBody ProductsModel productsModel){
+    public ProductsModel CreateProduct(@RequestBody ProductsModel productsModel) throws Exception {
         return productService.createProduct(productsModel);
     }
 
     @PatchMapping("/{id}")
-    public ProductsModel UpdateProduct(@PathVariable("id") long id, @RequestBody ProductsModel productsModel){
-        return new ProductsModel();
+    public ProductsModel UpdateProduct(@PathVariable("id") long id, @RequestBody ProductsModel productsModel) throws Exception {
+        return productService.updateProduct(id,productsModel);
     }
 
     @PutMapping("/{id}")
-    public ProductsModel ReplaceProduct(@PathVariable("id") long id, @RequestBody ProductsModel productsModel){
-        return new ProductsModel();
+    public ProductsModel ReplaceProduct(@PathVariable("id") long id, @RequestBody ProductsModel productsModel) throws Exception {
+        return productService.replaceProduct(id,productsModel);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable("id") long id){
-
+    public void deleteProduct(@PathVariable("id") long id) throws Exception {
+        productService.deleteProduct(id);
     }
 }
