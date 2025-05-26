@@ -6,6 +6,8 @@ import com.future.productservice.Models.CategoryModel;
 import com.future.productservice.Models.ProductsModel;
 import com.future.productservice.Models.RatingModel;
 import com.future.productservice.ProductInterfaces.ProductServiceInterface;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,7 +24,7 @@ public class FakeStoreProductService implements ProductServiceInterface {
     }
 
     @Override
-    public List<ProductsModel> getProducts() throws Exception{
+    public Page<ProductsModel> getProducts(int pageNumber,int pageSize) throws Exception{
 
         List<ProductsModel> products = new ArrayList<>();
         ProductDto[] productDtos = restTemplate.getForObject(
@@ -37,7 +39,7 @@ public class FakeStoreProductService implements ProductServiceInterface {
             throw new Exception("No products are available");
         }
 
-        return products;
+        return new PageImpl<>(products);
     }
 
     @Override

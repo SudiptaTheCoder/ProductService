@@ -10,6 +10,9 @@ import com.future.productservice.RepositoryInterface.ProductRepositoryInterface;
 import com.future.productservice.RepositoryInterface.RatingRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,8 +35,12 @@ public class DbProductService implements ProductServiceInterface {
     }
 
     @Override
-    public List<ProductsModel> getProducts() throws Exception {
-        List<ProductsModel> products = productRepository.findAll();
+    public Page<ProductsModel> getProducts(int pageNumber, int pageSize) throws Exception {
+        Page<ProductsModel> products = productRepository.findAll(
+                PageRequest.of(pageNumber, pageSize,
+                        Sort.by(Sort.Direction.DESC, "title")
+                        )
+        );
         if(products.isEmpty()){
             throw new Exception("No products available right now.");
         }

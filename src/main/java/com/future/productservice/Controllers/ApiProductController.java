@@ -5,6 +5,7 @@ import com.future.productservice.Exceptions.CustomExceptions;
 import com.future.productservice.Models.ProductsModel;
 import com.future.productservice.ProductInterfaces.ProductServiceInterface;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +21,9 @@ public class ApiProductController {
     }
 
     @GetMapping()
-    public List<ProductsModel> GetProducts() throws Exception {
-        return productService.getProducts();
+    public Page<ProductsModel> GetProducts(@RequestParam("pageNumber") int pageNumber,
+                                           @RequestParam("pageSize") int pageSize) throws Exception {
+        return productService.getProducts(pageNumber,pageSize);
     }
 
     @GetMapping("/{id}")
