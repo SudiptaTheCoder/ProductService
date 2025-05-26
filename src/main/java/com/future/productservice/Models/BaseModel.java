@@ -8,10 +8,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @MappedSuperclass
-public class BaseModel {
+public class BaseModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;

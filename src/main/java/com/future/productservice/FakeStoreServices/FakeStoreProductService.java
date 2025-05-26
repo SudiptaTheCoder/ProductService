@@ -8,6 +8,7 @@ import com.future.productservice.Models.RatingModel;
 import com.future.productservice.ProductInterfaces.ProductServiceInterface;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,9 +19,11 @@ import java.util.List;
 public class FakeStoreProductService implements ProductServiceInterface {
 
     private RestTemplate restTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    public FakeStoreProductService(RestTemplate restTemplate, RedisTemplate<String, Object> redisTemplate) {
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -45,6 +48,12 @@ public class FakeStoreProductService implements ProductServiceInterface {
     @Override
     public ProductsModel getProductById(long id) throws CustomExceptions {
 
+        ProductsModel product = (ProductsModel) redisTemplate.opsForHash().get("PRODUCTS","PRODUCT_"+id);
+
+        if(product != null){
+            return product;
+        }
+
         ProductDto prductDto = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/"+id,
                 ProductDto.class
@@ -52,7 +61,11 @@ public class FakeStoreProductService implements ProductServiceInterface {
         if(prductDto == null) {
             throw new CustomExceptions("Product with id "+id+ " does not exist.");
         }
-        return convertProductDtoToProduct(prductDto);
+        product = convertProductDtoToProduct(prductDto);
+        //insert into redis if not availabe
+        redisTemplate.opsForHash().put("PRODUCTS","PRODUCT_"+id,product);
+
+        return product;
     }
 
     @Override
